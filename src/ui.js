@@ -1,0 +1,25 @@
+// Ecos do Abismo — todos os direitos reservados. Consulte LICENSE.
+import { H, regions, clues } from "./data.js";
+import { newGame, heal } from "./game.js";
+import { s, log, clamp } from "./state.js";
+import { autosave, load } from "./storage.js";
+import { ritual } from "./story.js";
+import { grid, nearby } from "./world.js";
+
+export const $=id=>document.getElementById(id);
+export function show(title,text,choices=[['Continuar',()=>{}]]){ $('modalTitle').textContent=title;$('modalText').textContent=text;$('modalActions').replaceChildren();choices.forEach(([label,fn,enabled=true])=>{const b=document.createElement('button');b.textContent=label;b.disabled=!enabled;b.onclick=()=>{$('modal').close();fn();if(s){clamp();render();autosave();}};$('modalActions').append(b);});if(!$('modal').open)$('modal').showModal();}
+
+export function objective(){if(!s.clues.includes('manifesto'))return 'Encontre o manifesto no porto. Interaja perto de ?.';if(!s.flags.mara)return 'Converse com Mara na vila para acessar a mansão.';if(!s.clues.includes('diario'))return 'Investigue o diário na mansão Vesper.';if(!s.flags.tunnel)return 'Obtenha acesso ao túnel com a médica do hospital.';if(!s.clues.includes('selo')||!s.clues.includes('inscricao'))return 'Procure o selo e a inscrição nas grutas.';return 'Chegue ao farol e decida o destino da ilha.';}
+
+export function render(){if(!s)return;const r=regions[s.region],g=grid(s.region);for(const o of r.objects){g[o[2]][o[1]]=s.clues.includes(o[0])?':':o[3];}for(const e of s.enemies[s.region]||[])g[e.y][e.x]='!';g[s.y][s.x]='@';const cls={'@':'p','N':'n','?':'c','!':'e','>':'d','.':'f',':':'f'};$('map').innerHTML=g.map(row=>row.map(c=>cls[c]?'<span class="'+cls[c]+'">'+(c==='>'?'&gt;':c)+'</span>':c).join('')).join('\n');$('map').setAttribute('aria-label',r.name+'. Você em '+s.x+', '+s.y+'. '+nearby().map(o=>o[4]).join(', '));$('location').textContent=r.name;$('chapter').textContent='CAMPANHA / '+s.role.toUpperCase()+' / TURNO '+s.turn;$('description').textContent=r.desc;$('near').textContent=nearby().length?'Ao alcance: '+nearby().map(o=>o[4]).join(' · '):'Explore com WASD ou setas. Aproxime-se de um símbolo e pressione E.';$('stats').innerHTML=[['Vitalidade',s.hp],['Sanidade',s.san],['Conhecimento',s.occ]].map(([t,v])=>'<div class="stat">'+t+' <strong>'+v+'/100</strong><meter min="0" max="100" value="'+v+'">'+v+'</meter></div>').join('')+'<div class="subtle">Confiança: '+s.trust+' · Curativos: '+s.kits+'</div>';$('objective').textContent=s.ending?'Investigação encerrada. Leia o diário ou inicie outra partida.':objective();$('inventory').innerHTML='<span class="badge">Pistas '+s.clues.length+'/7</span><span class="badge">'+(s.flags.saved?'Paciente resgatado':'Paciente não resgatado')+'</span>';$('log').replaceChildren();s.log.slice(0,14).forEach(t=>{const p=document.createElement('p');p.textContent=t;$('log').append(p);});$('sneak').textContent='Furtividade [C]: '+(s.sneak?'sim':'não');$('heal').disabled=s.kits<=0||!!s.ending;}
+// Busca em largura: perseguidores contornam paredes sem atravessar obstáculos.
+
+export function journal(){if(!s)return;show('Diário de investigação',(s.clues.length?s.clues.map(id=>clues[id][0].toUpperCase()+'\n'+clues[id][1]).join('\n\n'):'Nenhuma pista registrada.')+'\n\nDECISÕES E ACONTECIMENTOS\n'+s.log.slice().reverse().join('\n'));}
+
+export function world(){show('Ilha de São Breu','PORTO — VILA — MANSÃO\n            |\n         HOSPITAL\n            |\n          GRUTAS — FAROL\n\n'+Object.entries(regions).map(([id,r])=>(s.seen[id]?'[visitado] ':'[não visitado] ')+r.name).join('\n')+'\n\nO mapa da ilha é informativo. Use as passagens > para viajar.');}
+
+export function help(){show('Como sobreviver','WASD / setas: caminhar. E: interagir com o símbolo no seu quadrado ou ao lado. C: alternar furtividade. H: curativo. R: respirar. J: diário. M: mapa da ilha.\n\nTudo acontece por turnos: você pode pensar sem pressa. Perseguidores (!) avançam a cada dois movimentos dentro do alcance de detecção (9 quadrados, ou 3 em furtividade). Colisão causa dano; fuja para outra passagem.\n\nPistas ocultas custam sanidade. Abaixo de 30, o pânico causa dano periódico e impede selar o ritual. Respirar recupera 15 de sanidade uma vez por região; funciona longe de perseguidores.\n\nO jogo salva automaticamente. Novo jogo substitui o progresso anterior somente após escolher a formação. Teclas não atuam enquanto um diálogo está aberto.\n\nCampanha curta: cerca de 15–25 minutos. Não há combate armado: investigue, negocie e escape.');}
+
+export function welcome(){
+show('O mar lembra','Uma cidade da costa deixou um homem sem passado. Uma ilha deixou uma pintora sem futuro. Você recebeu a carta que liga os dois.\n\nHorror investigativo ASCII · campanha original · escolhas persistentes\nTemas: horror cósmico, confinamento e perda de sanidade.',[['Começar investigação',newGame],['Continuar partida',load],['Controles',()=>show('Controles','WASD ou setas: mover. E: interagir. C: furtividade. J: diário. M: ilha. H: curar. R: respirar.\nTambém há botões na tela.',[['Voltar',welcome]])]]);
+}
