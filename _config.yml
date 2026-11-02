@@ -1,0 +1,16 @@
+title: Ecos do Abismo
+description: Jogo de horror e investigação ASCII
+lang: pt-BR
+encoding: utf-8
+# Sem tema ou plugins: preserva a interface do jogo.
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - tests
+  - scripts
+  - node_modules
+  - vendor
+  - .gitignore
+  - .bundle
