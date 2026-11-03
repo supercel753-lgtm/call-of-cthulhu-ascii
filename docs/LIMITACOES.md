@@ -1,0 +1,11 @@
+# LIMITAÇÕES CONHECIDAS — v2.0.0
+
+1. **Validação em navegador real pendente**: o Chromium usado na tentativa estava sujeito a `net::ERR_BLOCKED_BY_ADMINISTRATOR`, impossibilitando executar o roteiro visual/integrado. Testes automatizados Node e HTTP passaram; o funcionamento da apresentação em browser precisa de homologação manual em computador autorizado.
+2. **Desempenho não aferido por hardware**: o código limita a atualização visual a até 60 FPS, mas isso é uma meta, não uma medição confirmada em um PC modesto. O consumidor pode reduzir os efeitos pelo botão próximo ao cenário.
+3. **Som e autoplay**: os WAVs são originais, mono 16 kHz e intencionalmente minimalistas. A reprodução requer interação do jogador. Não foram realizados testes auditivos em dispositivo real nem há mixagem espacial avançada.
+4. **Arte e animação**: os spritesheets possuem quadros raster para as poses básicas; NPCs não têm árvore completa de animações de combate ou falas, pois tais mecânicas não existem no jogo original. A morte visual do investigador aplica-se à derrota existente.
+5. **Iluminação**: oclusão em grade de paredes/mobília e máscara reduzida; não há cálculo físico de feixes, sombras projetadas suaves nem shaders WebGL. A iluminação altera o campo visual e auxilia a habilidade Visão, mas a navegação por turnos é preservada.
+6. **Salvamento**: `localStorage`, sem nuvem, criptografia ou sincronização. A migração de saves antigos foi coberta por teste Node, não por todos os navegadores e origens possíveis.
+7. **Publicação**: o servidor Node foi testado. Um build Ruby/Jekyll de produção não foi executado nesta máquina. GitHub Pages deve usar processamento Jekyll para remover o front matter existente.
+8. **Conteúdo narrativo**: a duração, o número de regiões, os antagonistas e os finais são os mesmos da campanha de origem; não foram inventadas fases, missões ou vozes adicionais. A prioridade foi preservar os sistemas existentes.
+9. **Não há instalador binário de desktop**: o jogo é web e deve ser executado localmente com Node.js 20+. Os scripts `INICIAR_WINDOWS.bat` e `INICIAR_LINUX_MAC.sh` facilitam a inicialização, mas não empacotam Electron ou uma aplicação `.exe` independente.

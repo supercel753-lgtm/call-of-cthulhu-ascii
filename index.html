@@ -1,0 +1,63 @@
+---
+layout: null
+title: Ecos do Abismo · Pixel Remaster
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1218">
+  <meta name="description" content="Ecos do Abismo: investigação e terror cósmico em pixel art 2D. Seis regiões, sete pistas e quatro finais.">
+  <title>Ecos do Abismo | Nocturne Pixel Remaster</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+ <div class="noise" aria-hidden="true"></div>
+ <header class="masthead">
+  <div class="identity"><span class="eyebrow">DOSSIÊ 09 <span class="divider-dot">/</span> SÃO BREU, 1928</span>
+   <h1>ECOS <span>DO</span> ABISMO</h1><div class="subtitle">NOCTURNE <b>PIXEL REMASTER</b> <span class="header-line"></span> <span>HORROR INVESTIGATIVO 2D</span></div>
+  </div>
+  <nav class="tools" aria-label="Ações do jogo">
+   <button id="journal" title="Abrir diário de investigação (J)">DIÁRIO <kbd>J</kbd></button>
+   <button id="inventoryBtn" title="Inventário de recursos (I)">INVENTÁRIO <kbd>I</kbd></button>
+   <button id="sheet" title="Atributos e ficha (F)">FICHA <kbd>F</kbd></button>
+   <button id="world" title="Mapa da ilha (M)">ILHA <kbd>M</kbd></button>
+   <button id="pause" title="Pausar (Esc)">PAUSAR <kbd>ESC</kbd></button>
+   <button id="settings" title="Configurações">AJUSTES</button>
+  </nav>
+ </header>
+ <noscript>Ative JavaScript para jogar Ecos do Abismo.</noscript>
+ <main class="layout">
+  <section class="game-column" aria-label="Exploração">
+   <div class="stage-heading"><div><p class="eyebrow" id="chapter">ARQUIVO / ILHA DE SÃO BREU</p><h2 id="location">A HISTÓRIA NÃO TERMINOU EM 1922</h2></div><span class="status-chip" id="assetsStatus">CARREGANDO ARTE...</span></div>
+   <div class="scene-description" id="description">A maré conhece todos os nomes.</div>
+   <div class="screen" id="screenContainer">
+    <canvas id="scene" width="768" height="448" role="img" aria-label="Cenário de exploração em pixel art" tabindex="0">Seu navegador precisa de Canvas 2D.</canvas>
+    <div class="screen-overlay top-left"><span class="record-dot"></span> REGISTRO 1928 <span class="small-line"></span> <span id="cameraStatus">SÃO BREU</span></div>
+    <div class="screen-overlay bottom-left">W A S D <span class="screen-key-desc">MOVER</span> <span class="separator">/</span> E <span class="screen-key-desc">INTERAGIR</span> <span class="separator">/</span> C <span class="screen-key-desc">FURTIVIDADE</span></div>
+    <div id="regionBanner" aria-hidden="true"></div>
+   </div>
+   <div class="scene-meta"><span class="scene-caption" id="sceneCaption">O mar lembra de você.</span><div class="scene-options"><button id="effects">Efeitos: ativos</button><button id="audioToggle" aria-label="Ativar ou silenciar áudio">SOM: LIGADO</button></div></div>
+   <div class="interaction-brief"><span class="interaction-indicator">E</span><p id="near">Aproxime-se de uma pista, personagem ou passagem para interagir.</p></div>
+   <div class="actions"><button class="primary" id="interact">INVESTIGAR <kbd>E</kbd></button><button id="sneak">FURTIVIDADE <kbd>C</kbd></button><button id="heal">CURATIVO <kbd>H</kbd></button><button id="rest">RESPIRAR <kbd>R</kbd></button><button id="help">COMO JOGAR</button></div>
+   <div class="touch" aria-label="Controles de movimento">
+    <div class="controlrow"><button data-move="0,-1" aria-label="Andar para norte">▲</button></div>
+    <div class="controlrow"><button data-move="-1,0" aria-label="Andar para oeste">◀</button><button data-move="0,1" aria-label="Andar para sul">▼</button><button data-move="1,0" aria-label="Andar para leste">▶</button></div>
+   </div>
+  </section>
+  <aside class="sidebar">
+   <section class="panel dossier"><p class="eyebrow">IDENTIDADE / REGISTRO PESSOAL</p><div class="portrait-row"><div class="portrait-frame"><div id="playerPortrait" role="img" aria-label="Retrato pixel art do investigador"></div></div><div class="portrait-info"><span class="document-code">ARQ. Nº 0009</span><h2>O INVESTIGADOR</h2><p class="subtle">Um rosto que os arquivos tentaram apagar.</p></div></div>
+    <div id="stats"></div><p id="rpgSummary" class="subtle"></p><p id="skillsSummary" class="subtle skill-summary"></p>
+    <div class="objective-box"><p class="eyebrow">OBJETIVO ATUAL <span class="indicator-pulse"></span></p><p id="objective">Siga as marcas deixadas pela maré.</p></div>
+    <div id="inventory" class="inventory-summary"></div>
+   </section>
+   <section class="panel map-panel"><div class="panel-title"><h2>CARTA DE SÃO BREU</h2><span class="map-scale">37 × 17</span></div><canvas id="map" width="185" height="85" role="img" aria-label="Minimapa da região"></canvas><div class="legend"><span class="legend-item"><i class="legend-color person"></i> você</span><span class="legend-item"><i class="legend-color clue"></i> pista</span><span class="legend-item"><i class="legend-color danger"></i> perigo</span><span class="legend-item"><i class="legend-color exit"></i> saída</span></div></section>
+   <section class="panel log-panel"><div class="panel-title"><h2>ECOS RECENTES</h2><span class="pulse">AO VIVO</span></div><div id="log" aria-live="polite"></div></section>
+   <section class="panel panorama-panel"><p class="eyebrow">FOTOGRAFIA / DOCUMENTO SEM DATA</p><img id="regionArt" width="480" height="168" src="./assets/panoramas/porto.png" alt="Silhueta noturna da região em pixel art"><p class="subtle">Nem toda fotografia registra o que aconteceu.</p></section>
+  </aside>
+ </main>
+ <footer class="site-footer"><span>© ECOS DO ABISMO · CAMPANHA ORIGINAL · 2026</span><span>UMA INVESTIGAÇÃO NÃO TERMINA QUANDO VOCÊ FECHA OS OLHOS.</span><div class="footer-actions"><button id="save">SALVAR</button><button id="load">CARREGAR</button><button id="new">NOVO JOGO</button></div><a href="./LICENSE">LICENÇA</a></footer>
+ <dialog id="modal" aria-labelledby="modalTitle"><div class="modal-ribbon"><span class="eyebrow">ECOS DO ABISMO</span><span class="modal-mark">ARQUIVO CONFIDENCIAL</span></div><h2 id="modalTitle"></h2><div class="dialog-body"><div class="dialog-art"><div id="dialogPortrait" role="img" aria-label="Ilustração em pixel art"></div><div class="portrait-label">RETRATO / EVIDÊNCIA</div></div><div id="modalText"></div></div><div id="modalActions"></div></dialog>
+ <script type="module" src="./src/main.js"></script>
+</body></html>

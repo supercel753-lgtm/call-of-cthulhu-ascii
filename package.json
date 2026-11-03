@@ -1,0 +1,13 @@
+{
+  "name": "ecos-do-abismo",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "description": "Survival horror investigativo 2D em pixel art original — remasterização Nocturne",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "node scripts/serve.js",
+    "assets": "python3 scripts/generate_assets.py"
+  }
+}
